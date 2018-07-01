@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>React + Spring</title>
+</head>
+<body>
+<div id='root'></div>
+
+<script src="https://fb.me/react-15.0.1.js"></script>
+<script src="https://fb.me/react-dom-15.0.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<script type="text/babel">
+    var Ticket = React.createClass({
+        render: function() {
+            return (
+                <tr>
+                    <td>{this.props.ticket.game}</td>
+                    <td>{this.props.ticket.date}</td>
+                    <td>{this.props.ticket.city}</td>
+                    <td>{this.props.ticket.stadium}</td>
+                    <td>{this.props.ticket.price}</td>
+                </tr>);
+        }
+    });
+    var App = React.createClass({
+
+        loadTicketsFromServer: function () {
+            var self = this;
+            $.ajax({url: "http://localhost:8080/api/messages"})
+            .then(function (data) {
+                console.log(data);
+                self.setState({tickets: data});
+            });
+        },
+
+        getInitialState: function () {
+            return {tickets: []};
+        },
+
+        componentDidMount: function () {
+            this.loadTicketsFromServer();
+        },
+
+        render() {
+            return ( <TicketTable tickets={this.state.tickets}/> );
+        }
+    });
+
+    var TICKETS = [
+        {game: 'Argentina-Croatia', date: '2018-06-30', city: 'Moscow', stadium: 'Dinamo', price: 300},
+        {game: 'Germany-China', date: '2018-07-05', city: 'St. Petersburg', stadium: 'Zenit', price: 240},
+        {game: 'Panama-Poland', date: '2018-06-18', city: 'Sochi', stadium: 'Fischt', price: 310}
+    ];
+    var TicketTable = React.createClass({
+        render: function() {
+            var rows = [];
+            this.props.tickets.forEach(function(ticket) {
+                rows.push(<Ticket ticket={ticket} />);
+            });
+            return (
+            <div className="container">
+                <table className="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Game</th><th>Date</th><th>City</th><th>Stadium</th><th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>{rows}</tbody>
+                </table>
+            </div>);
+        }
+    });
+    ReactDOM.render(<App />, document.getElementById('root') );
+</script>
+</body>
+</html>
