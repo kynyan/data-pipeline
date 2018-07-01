@@ -1,10 +1,10 @@
 package project.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.dto.TicketDto;
 import project.model.Message;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import project.redis.RedisMessagePublisher;
 import project.redis.RedisMessageSubscriber;
 import project.service.MessageService;
