@@ -3,6 +3,7 @@ package project.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import project.dto.TicketDto;
 import project.model.Message;
@@ -18,12 +19,13 @@ import java.util.stream.Collectors;
 @Slf4j
 public class MessageService {
     private final MessageRepository messageRepository;
-
     private ObjectMapper objectMapper = ObjectMapperFactory.OBJECT_MAPPER_WITH_TIMESTAMPS;
+    private final SimpMessagingTemplate template;
 
     public Message convertAndSaveMessage(String receivedMessage) {
         Message message = messageRepository.save(getConvertedMessage(receivedMessage));
         log.info("Message saved with ID [{}]", message.getId());
+        template.convertAndSend("/topic/tickets", new TicketDto(message.getTicket()));
         return message;
     }
 

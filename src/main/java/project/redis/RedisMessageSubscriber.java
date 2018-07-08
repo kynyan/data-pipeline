@@ -1,9 +1,7 @@
 package project.redis;
 
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.lang.Nullable;
@@ -17,7 +15,6 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class RedisMessageSubscriber implements MessageListener {
-//    @Autowired
     private final MessageService messageService;
 
     public static List<String> messageList = new ArrayList<>();
