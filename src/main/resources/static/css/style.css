@@ -1,0 +1,12 @@
+.wrapper {
+  height: 100%;
+  display: flex;
+}
+.left {
+  background: red;
+  width: 100%;
+}
+.right {
+  background: green;
+  width: 100%;
+}

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>React + Spring</title>
+    <title>Tickets</title>
 </head>
 <body>
 <div id='root'></div>
@@ -10,7 +10,11 @@
 <script src="https://fb.me/react-dom-15.0.1.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.5/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/style.css" />
 
 <script type="text/babel">
     var Ticket = React.createClass({
@@ -31,39 +35,70 @@
             $.ajax({url: "http://localhost:8080/api/messages"})
             .then(function (data) {
                 console.log(data);
-                self.setState({tickets: data});
+                self.setState({leftTickets: data});
             });
+        },
+
+        connectToChannel: function (registration) {
+            const ws = new SockJS('/socket');
+		    const client = Stomp.over(ws);
+		    console.log('entered connect function');
+		    client.connect({}, function (frame) {
+			    console.log('client connected');
+			    client.subscribe(registration.route, registration.callback);
+			});
+        },
+
+        showMessage: function (message) {
+            var self = this;
+	        var data = [ JSON.parse(message.body) ];
+	        self.setState({rightTickets: data});
         },
 
         getInitialState: function () {
-            return {tickets: []};
+            return {leftTickets: [], rightTickets: []};
         },
 
         componentDidMount: function () {
-            this.loadTicketsFromServer();
+            this.connectToChannel({route: '/topic/tickets', callback: this.showMessage});
         },
 
         render() {
-            return (<div>
-                        <button id="load" onClick={this.loadTicketsFromServer}>Load Tickets</button>
-                        <TicketTable tickets={this.state.tickets}/>
+            return (<div className="wrapper">
+                        <LeftTicketTable leftTickets={this.state.leftTickets} loadTicketsFromServer={this.loadTicketsFromServer}/>
+                        <RightTicketTable rightTickets={this.state.rightTickets}/>
                     </div>);
         }
     });
-
-    var TICKETS = [
-        {game: 'Argentina-Croatia', date: '2018-06-30', city: 'Moscow', stadium: 'Dinamo', price: 300},
-        {game: 'Germany-China', date: '2018-07-05', city: 'St. Petersburg', stadium: 'Zenit', price: 240},
-        {game: 'Panama-Poland', date: '2018-06-18', city: 'Sochi', stadium: 'Fischt', price: 310}
-    ];
-    var TicketTable = React.createClass({
+    var LeftTicketTable = React.createClass({
         render: function() {
             var rows = [];
-            this.props.tickets.forEach(function(ticket) {
+            this.props.leftTickets.forEach(function(ticket) {
                 rows.push(<Ticket ticket={ticket} />);
             });
             return (
-            <div className="container">
+            <div className="container left">
+                <button id="load" onClick={this.props.loadTicketsFromServer}>Load tickets from DB</button>
+                <table className="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Game</th><th>Date</th><th>City</th><th>Stadium</th><th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>{rows}</tbody>
+                </table>
+            </div>);
+        }
+    });
+
+    var RightTicketTable = React.createClass({
+        render: function() {
+            var rows = [];
+            this.props.rightTickets.forEach(function(ticket) {
+                rows.push(<Ticket ticket={ticket} />);
+            });
+            return (
+            <div className="container right">
                 <table className="table table-striped">
                     <thead>
                         <tr>
