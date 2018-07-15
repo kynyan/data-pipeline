@@ -32,11 +32,16 @@
     var App = React.createClass({
         loadTicketsFromServer: function () {
             var self = this;
-            $.ajax({url: "http://localhost:8080/api/messages"})
+            $.ajax({url: 'http://localhost:8080/api/messages'})
             .then(function (data) {
                 console.log(data);
                 self.setState({leftTickets: data});
             });
+        },
+
+        generateRandomTicket: function () {
+            var self = this;
+            $.ajax({url: 'http://localhost:8080/api/random', method: 'POST'});
         },
 
         connectToChannel: function (registration) {
@@ -51,8 +56,10 @@
 
         showMessage: function (message) {
             var self = this;
-	        var data = [ JSON.parse(message.body) ];
-	        self.setState({rightTickets: data});
+	        var newTicket = JSON.parse(message.body);
+	        self.setState(prevState => ({
+                rightTickets: [...prevState.rightTickets, newTicket]
+            }));
         },
 
         getInitialState: function () {
@@ -66,10 +73,12 @@
         render() {
             return (<div className="wrapper">
                         <LeftTicketTable leftTickets={this.state.leftTickets} loadTicketsFromServer={this.loadTicketsFromServer}/>
-                        <RightTicketTable rightTickets={this.state.rightTickets}/>
+                        <div className="vl"></div>
+                        <RightTicketTable rightTickets={this.state.rightTickets} generateRandomTicket={this.generateRandomTicket}/>
                     </div>);
         }
     });
+
     var LeftTicketTable = React.createClass({
         render: function() {
             var rows = [];
@@ -99,6 +108,7 @@
             });
             return (
             <div className="container right">
+                <button id="random" onClick={this.props.generateRandomTicket}>Generate and save ticket</button>
                 <table className="table table-striped">
                     <thead>
                         <tr>
