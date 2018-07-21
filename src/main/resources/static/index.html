@@ -32,7 +32,7 @@
     var App = React.createClass({
         loadTicketsFromServer: function () {
             var self = this;
-            $.ajax({url: 'http://localhost:8080/api/messages'})
+            $.ajax({url: 'http://localhost:8088/api/messages'})
             .then(function (data) {
                 console.log(data);
                 self.setState({leftTickets: data});
@@ -41,7 +41,7 @@
 
         generateRandomTicket: function () {
             var self = this;
-            $.ajax({url: 'http://localhost:8080/api/random', method: 'POST'});
+            $.ajax({url: 'http://localhost:8088/api/random', method: 'POST'});
         },
 
         connectToChannel: function (registration) {
@@ -87,8 +87,8 @@
             });
             return (
             <div className="container left">
-                <button id="load" onClick={this.props.loadTicketsFromServer}>Load tickets from DB</button>
-                <table className="table table-striped">
+                <button id="load" className="btn btn-primary"  onClick={this.props.loadTicketsFromServer}>Load tickets from DB</button>
+                <table className="table table">
                     <thead>
                         <tr>
                             <th>Game</th><th>Date</th><th>City</th><th>Stadium</th><th>Price</th>
@@ -108,8 +108,8 @@
             });
             return (
             <div className="container right">
-                <button id="random" onClick={this.props.generateRandomTicket}>Generate and save ticket</button>
-                <table className="table table-striped">
+                <button id="random" className="btn btn-primary" onClick={this.props.generateRandomTicket}>Generate and save ticket</button>
+                <table className="table table">
                     <thead>
                         <tr>
                             <th>Game</th><th>Date</th><th>City</th><th>Stadium</th><th>Price</th>

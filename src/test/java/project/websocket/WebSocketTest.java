@@ -38,8 +38,7 @@ public class WebSocketTest {
     public void setup() {
         websocketUrl = "ws://localhost:" + port + "/socket";
         blockingQueue = new LinkedBlockingDeque<>();
-        stompClient = new WebSocketStompClient(new SockJsClient(
-                asList(new WebSocketTransport(new StandardWebSocketClient()))));
+        stompClient = new WebSocketStompClient(new SockJsClient(asList(new WebSocketTransport(new StandardWebSocketClient()))));
     }
 
     @Test

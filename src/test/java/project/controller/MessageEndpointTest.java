@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import project.dto.TicketDto;
 import project.model.Message;
@@ -23,7 +23,6 @@ import static com.jayway.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
 
 @RunWith(MockitoJUnitRunner.class)
-//@PowerMockIgnore({"javax.net.ssl.*","javax.security.*"})
 public class MessageEndpointTest {
     @Mock
     private MessageRepository messageRepository;

@@ -1,0 +1,26 @@
+version: '3'
+services:
+  tickets-app:
+    ports:
+      - "8088:8088"
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: app
+    container_name: tickets_app
+    depends_on:
+      - redis
+    networks:
+      - my-net
+
+  redis:
+      ports:
+        - "6379:6379"
+      image: redis:4.0.10-alpine
+      container_name: redis
+      networks:
+        - my-net
+
+networks:
+  my-net:
+    driver: bridge
