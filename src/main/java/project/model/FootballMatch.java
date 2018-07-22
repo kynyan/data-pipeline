@@ -19,7 +19,7 @@ import static io.qala.datagen.RandomShortApi.sample;
 public class FootballMatch {
     private static List<String> countries = Arrays.asList("Argentina", "Australia", "Belgium", "Brazil", "Colombia",
             "Costa Rica", "Croatia", "Denmark", "Egypt", "England", "France", "Germany", "Iceland", "Iran", "Japan",
-            "South Korea", "Mexico", "Morocco", "Negeria", "Panama", "Peru", "Poland", "Portugal", "Russia",
+            "South Korea", "Mexico", "Morocco", "Nigeria", "Panama", "Peru", "Poland", "Portugal", "Russia",
             "Saudi Arabia", "Senegal", "Serbia", "Spain", "Sweden", "Switzerland", "Tunisia", "Uruguay");
     private static List<String> stadiums = Arrays.asList("Arena", "Luzhniki", "Spartak", "Fisht");
     private static List<String> cities = Arrays.asList("Moscow", "Sochi", "St. Petersburg", "Yekaterinburg",

@@ -8,7 +8,7 @@ and send to all app clients via web socket channel.
 After that, new ticket will appear on the client's web page.
 Also it is possible to get all tickets stored in the DB by clicking "Load tickets from DB" button.
 
-# Run app in Docker
+### Run app in Docker
 
 * Install Docker
 * Checkout source code with git or simply download .zip package and unpack it.
@@ -19,13 +19,13 @@ Also it is possible to get all tickets stored in the DB by clicking "Load ticket
 * Execute `docker-compose up -d`.
 * After application is up, it is available at localhost:8088. 
 
-# UI
+### UI
 
 * Web page available at localhost:8088/ is splitted into 2 parts.
 * Left part demonstrates that all available tickets can be loaded from DB.
 * Right part shows real time message delivery through web socket channel.
 
-# API
+### API
 
 * To get all tickets from the DB: GET localhost:8088/api/tickets
 * If you want to publish your own ticket: POST localhost:8088/api/ticket. Here is an example:
