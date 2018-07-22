@@ -1,6 +1,7 @@
 package project.websocket;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +16,6 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 import org.springframework.web.socket.sockjs.client.SockJsClient;
 import org.springframework.web.socket.sockjs.client.WebSocketTransport;
-import project.IntegrationTest;
 
 import java.lang.reflect.Type;
 import java.util.concurrent.BlockingQueue;
@@ -45,6 +45,7 @@ public class WebSocketTest {
     }
 
     @Test
+    @Ignore("run this test separately")
     public void shouldReceiveAMessageFromTheServer() throws Exception {
         StompSession session = stompClient
                 .connect(websocketUrl, new StompSessionHandlerAdapter() {})

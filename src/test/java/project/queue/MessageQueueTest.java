@@ -1,17 +1,13 @@
-package project.message_queue;
+package project.queue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.testcontainers.containers.GenericContainer;
 import project.IntegrationTest;
-import project.PersistenceConfig;
-import project.PipelineConfig;
-import project.WebSocketConfig;
 import project.model.Message;
 import project.redis.MessagePublisher;
 import project.redis.RedisMessageSubscriber;
