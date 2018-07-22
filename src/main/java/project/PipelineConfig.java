@@ -1,6 +1,5 @@
 package project;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -20,12 +19,9 @@ import project.service.MessageService;
 @ComponentScan({"project.repository", "project.service", "project.redis"})
 public class PipelineConfig {
 
-    @Autowired
-    private MessageService messageService;
-
     @Bean
     public JedisConnectionFactory jedisConnectionFactory() {
-        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration("redis", 6379);
+        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration("localhost", 6379);
         return new JedisConnectionFactory(config);
     }
 
@@ -38,20 +34,20 @@ public class PipelineConfig {
     }
 
     @Bean
-    MessageListenerAdapter messageListener() {
+    public MessageListenerAdapter messageListener(MessageService messageService) {
         return new MessageListenerAdapter(new RedisMessageSubscriber(messageService));
     }
 
     @Bean
-    RedisMessageListenerContainer redisContainer() {
+    public RedisMessageListenerContainer redisContainer(MessageService messageService) {
         final RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(jedisConnectionFactory());
-        container.addMessageListener(messageListener(), topic());
+        container.addMessageListener(messageListener(messageService), topic());
         return container;
     }
 
     @Bean
-    MessagePublisher redisPublisher() {
+    public MessagePublisher redisPublisher() {
         return new RedisMessagePublisher(redisTemplate(), topic());
     }
 

@@ -45,13 +45,12 @@ public class WebSocketTest {
     public void shouldReceiveAMessageFromTheServer() throws Exception {
         StompSession session = stompClient
                 .connect(websocketUrl, new StompSessionHandlerAdapter() {})
-                .get(1, SECONDS);
+                .get(2, SECONDS);
         session.subscribe(WEBSOCKET_TOPIC, new DefaultStompFrameHandler());
 
         String message = "MESSAGE TEST";
         session.send(WEBSOCKET_TOPIC, message.getBytes());
-
-        assertEquals(message, blockingQueue.poll(1, SECONDS));
+        assertEquals(message, blockingQueue.take());
     }
 
     class DefaultStompFrameHandler implements StompFrameHandler {

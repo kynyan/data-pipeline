@@ -8,35 +8,40 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.testcontainers.containers.GenericContainer;
+import project.IntegrationTest;
+import project.PersistenceConfig;
 import project.PipelineConfig;
+import project.WebSocketConfig;
 import project.model.Message;
-import project.redis.RedisMessagePublisher;
+import project.redis.MessagePublisher;
 import project.redis.RedisMessageSubscriber;
 import project.utils.ObjectMapperFactory;
 
 import java.io.IOException;
+import java.util.List;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
 import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = PipelineConfig.class)
+@IntegrationTest
 public class MessageQueueTest {
     @Rule
     public GenericContainer redis = new GenericContainer("redis:4.0.10").withExposedPorts(6379);
 
     @Autowired
-    private RedisMessagePublisher messagePublisher;
+    private MessagePublisher redisPublisher;
 
     private ObjectMapper objectMapper = ObjectMapperFactory.OBJECT_MAPPER_WITH_TIMESTAMPS;
 
     @Test
-    public void shouldPublishMessage() throws IOException {
+    public void shouldPublishMessage() throws IOException, InterruptedException {
         Message originalMessage = Message.random();
-        String redisUrl = redis.getContainerIpAddress() + ":" + redis.getMappedPort(6379);
-        messagePublisher.publish(objectMapper.writeValueAsString(originalMessage));
-        String receivedMessage = RedisMessageSubscriber.messageList.get(0);
-        assertNotNull(receivedMessage);
+        redisPublisher.publish(objectMapper.writeValueAsString(originalMessage));
+        Thread.sleep(1000); //this is to give redis time to publish and receive message. Ugly, should be refactored.
+        List<String> messages = RedisMessageSubscriber.messageList;
+        assertEquals(1, messages.size());
+        String receivedMessage = messages.get(0);
         assertReflectionEquals(originalMessage, objectMapper.readValue(receivedMessage, Message.class));
     }
 }
