@@ -13,8 +13,8 @@ Also it is possible to get all tickets stored in the DB by clicking "Load ticket
 * Install Docker
 * Checkout source code with git or simply download .zip package and unpack it.
 * Open terminal (GitBash on Windows).
-* Go to the project root directory (/data-pipeline).
-* Execute `./mvnw clean package -DskipTests`.
+* Go to the project root directory (/data-pipeline or /data-pipeline-master if you downloaded .zip).
+* Execute `./mvnw clean package -DskipTests` (java has to be installed).
 * After previous command is completed, .jar file will be generated.
 * Execute `docker-compose up -d`.
 * After application is up, it is available at localhost:8088. 
@@ -30,5 +30,5 @@ Also it is possible to get all tickets stored in the DB by clicking "Load ticket
 * To get all tickets from the DB: GET localhost:8088/api/tickets
 * If you want to publish your own ticket: POST localhost:8088/api/ticket. Here is an example:
 ``` 
-curl -d '{{"ticket":{"game":{"firstTeam":"France","secondTeam":"Brasil","stadium":{"city":"Saint-Denis","name":"Stade de France"},"matchDate":"1998-07-12"},"price":1000}}}' -H "Content-Type: application/json" -X POST http://localhost:8088/api/message
+curl -d '{"ticket":{"game":{"firstTeam":"France","secondTeam":"Brasil","stadium":{"city":"Saint-Denis","name":"Stade de France"},"matchDate":"1998-07-12"},"price":1000}}' -H "Content-Type: application/json" -X POST http://localhost:8088/api/message
 ```

@@ -1,5 +1,6 @@
 package project;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -19,9 +20,15 @@ import project.service.MessageService;
 @ComponentScan({"project.repository", "project.service", "project.redis"})
 public class PipelineConfig {
 
+    @Value("${redis.hostname}")
+    private String redisHostname;
+
+    @Value("${redis.port}")
+    private Integer redisPort;
+
     @Bean
     public JedisConnectionFactory jedisConnectionFactory() {
-        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration("redis", 6379);
+        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration(redisHostname, redisPort);
         return new JedisConnectionFactory(config);
     }
 
